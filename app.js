@@ -12,7 +12,7 @@
 // Game Values
 let min = 1,
     max = 10,
-    winningNum = 2,
+    winningNum = getRandomNum(min, max),
     guessesLeft = 3;
 
 // UI elements
@@ -26,6 +26,13 @@ const UIgame = document.querySelector('#game'),
 // Assign UI min and max
 UIminNum.textContent = min;
 UImaxNum.textContent = max;
+
+//play again event listener
+UIgame.addEventListener('mousedown', (e) => {
+  if(e.target.className === 'play-again'){
+    location.reload();
+  }
+})
 
 // Add event listener
 UIguessBtn.addEventListener('click', () => {
@@ -46,15 +53,17 @@ UIguessBtn.addEventListener('click', () => {
     
   } else {
     guessesLeft -= 1;
-    
+
     if (guessesLeft === 0){
       
       gameOver(false, `You lost. The correct number was ${winningNum}.`, 'red');
 
     } else {
+
       UIguessInput.style.borderColor = 'red';
       setMessage(`${guess} is a wrong guess, ${guessesLeft} guesses left.`, 'red');
       UIguessInput.value = '';
+
     }
   }
 
@@ -69,6 +78,14 @@ function gameOver(won, msg){
   UIresultMsg.style.color = color;
 
   setMessage(msg)
+
+  //play again
+  UIguessBtn.value = 'Play Again';
+  UIguessBtn.className += 'play-again';
+}
+
+function getRandomNum(min, max){
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function setMessage(msg, color){
